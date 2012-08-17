@@ -1,0 +1,2 @@
+CljureBigDataJugSummerCamp2012
+==============================
