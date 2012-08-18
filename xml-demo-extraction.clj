@@ -1,9 +1,10 @@
 ;; test xml
 ;;  
+(use '[clojure.contrib.generic.functor :only (fmap)])
 
 (ns statisticator
   (:use clojure.test)
-  (:use (incanter core io datasets stats))
+  (:use (incanter core io stats datasets))
   (:require [clojure.xml :as xml]))
 
 (def datadir "../data/etalon/") ;;
@@ -11,45 +12,29 @@
 ;;(def datadir "../data/6h/") ;;
 ;;(def datafilename "20120228-1100_MS1_TPS2012IBM2.jtl") ;; 87 Mo -> 8s a 50s ?
 (def datafile (str datadir "/" datafilename))
-(time (def xmldata (xml/parse datafile)))
+;(time (def xmldata (xml/parse datafile)))
 
 (def pagepattern #"SU[^-]+-[^-]+-Page")
+(defn is-page [sample] (re-matches pagepattern (:lb sample)))
 
-		   ;;#(re-matches pagepattern label)
-;;(def samples (for [x (xml-seq xmldata)
-;;		   :let [label (:ts (:attrs el))] 
-;;		   :when  (= :sample (:tag x))  ] 
-;;	       (:attrs x)))
+(defn selected-samples-filter [el] (and (= :sample (:tag el)) (is-page (:attrs el)) ))  
 
-;(def samples (map #(:attrs %) (filter #(= :sample (:tag %)) (xml-seq xmldata))))
-(defn selectedSamples [el] (and (= :sample (:tag el)) (re-matches pagepattern (:lb (:attrs el)))))  
-;(def samples (map #(:lb (:attrs %)) (filter selectedSamples (xml-seq xmldata))))
-;(def samples (map #(:attrs %) (filter selectedSamples (xml-seq xmldata))))
-(def selectedColumns [:ts :search__phrase :userId :rc :by :productId :shop :lb :t :s])
-(def samples (map
-	      #(select-keys (:attrs %) selectedColumns)
-	      (filter selectedSamples (xml-seq xmldata))))
+(defn auto-format [s] (if (number? (read-string s)) (Long/parseLong s) s ))
+	    
+(defn extract-data [xml selected-filter columns]
+  (map
+   #(clojure.contrib.generic.functor/fmap auto-format  (select-keys (:attrs %) columns))
+   (filter selected-filter (xml-seq xml))))
 
-(defn converNumerics [sample] (update-in sample [:t :ts]  #(Long/parseLong %) ))
-(deftest test-converNumerics
-  (is (= {:t 2 :ts 2}  (converNumerics {:t "2" :ts "2"}) )) )
+(defn read-dataset-xml [xml selected-filter columns]
+  (dataset columns (extract-data xml selected-filter columns)))
 
-(def ds (dataset selectedColumns
-		  (map #(select-keys (:attrs %) selectedColumns)
-		       (filter selectedSamples (xml-seq xmldata))) ))
+;(def ds (read-dataset-xml 
+;	 (xml/parse "../data/etalon/20120228-0933_MSALL_TPE2012IBM2.jtl")
+;	 selected-samples-filter
+;	 [:ts :search__phrase :userId :rc :by :productId :shop :lb :t :s]) ) 
                   
-($ :t ds)
-;(mean (map read-string ($ :t ds)))
-
-
-;(defn update-columns
-;         [dataset columns f]
-;         (->> (map #(doseq [col columns] (update-in % [col] f)) (:rows dataset))
-;           vec
-;           (assoc dataset :rows)))
-;(def ds2 (update-columns ds [:t :ts] #(Long/parseLong %))  )
-
 ;(mean ($ :t ds))
-;(view (time-series-plot :ts :t :data ds));
+;((view ds)
+;(view (time-series-plot :ts :t :data ds))
 
-(run-tests)
