@@ -25,9 +25,9 @@
 ;(def samples (map #(:lb (:attrs %)) (filter selectedSamples (xml-seq xmldata))))
 ;(def samples (map #(:attrs %) (filter selectedSamples (xml-seq xmldata))))
 (def selectedColumns [:ts :search__phrase :userId :rc :by :productId :shop :lb :t :s])
-(def samples (map #(select-keys (:attrs %) factors) (filter selectedSamples (xml-seq xmldata))))
+(def samples (map #(select-keys (:attrs %) selectedColumns) (filter selectedSamples (xml-seq xmldata))))
 
 (def ds (dataset selectedColumns
 		 (map #(select-keys (:attrs %) selectedColumns)
 		      (filter selectedSamples (xml-seq xmldata))) ))
-(mean ($ :t ds))
+($ :t ds)
