@@ -2,6 +2,7 @@
 ;;  
 
 (ns statisticator
+  (:use clojure.test)
   (:use (incanter core io datasets stats))
   (:require [clojure.xml :as xml]))
 
@@ -25,9 +26,30 @@
 ;(def samples (map #(:lb (:attrs %)) (filter selectedSamples (xml-seq xmldata))))
 ;(def samples (map #(:attrs %) (filter selectedSamples (xml-seq xmldata))))
 (def selectedColumns [:ts :search__phrase :userId :rc :by :productId :shop :lb :t :s])
-(def samples (map #(select-keys (:attrs %) selectedColumns) (filter selectedSamples (xml-seq xmldata))))
+(def samples (map
+	      #(select-keys (:attrs %) selectedColumns)
+	      (filter selectedSamples (xml-seq xmldata))))
+
+(defn converNumerics [sample] (update-in sample [:t :ts]  #(Long/parseLong %) ))
+(deftest test-converNumerics
+  (is (= {:t 2 :ts 2}  (converNumerics {:t "2" :ts "2"}) )) )
 
 (def ds (dataset selectedColumns
-		 (map #(select-keys (:attrs %) selectedColumns)
-		      (filter selectedSamples (xml-seq xmldata))) ))
+		  (map #(select-keys (:attrs %) selectedColumns)
+		       (filter selectedSamples (xml-seq xmldata))) ))
+                  
 ($ :t ds)
+;(mean (map read-string ($ :t ds)))
+
+
+;(defn update-columns
+;         [dataset columns f]
+;         (->> (map #(doseq [col columns] (update-in % [col] f)) (:rows dataset))
+;           vec
+;           (assoc dataset :rows)))
+;(def ds2 (update-columns ds [:t :ts] #(Long/parseLong %))  )
+
+;(mean ($ :t ds))
+;(view (time-series-plot :ts :t :data ds));
+
+(run-tests)
