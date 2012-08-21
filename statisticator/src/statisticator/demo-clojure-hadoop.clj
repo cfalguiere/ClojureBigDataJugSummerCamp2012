@@ -10,19 +10,15 @@
 (imp/import-mapreduce)
 
 (defn my-map [key value]
-  (println "my-map" key value)
   (map (fn [token] [token 1]) (enumeration-seq (StringTokenizer. value))))
 
 (defn my-reduce [key values-fn]
-  (println "my-reduce" key values-fn)
   [[key (reduce + (values-fn))]])
 
 (defn string-long-writer [^TaskInputOutputContext context ^String key value]
-  (println "string-long-writer" key values-fn)
   (.write context (Text. key) (LongWritable. value)))
 
 (defn string-long-reduce-reader [^Text key wvalues]
-  (println "string-long-reduce-reader" key wvalues)
   [(.toString key)
    (fn [] (map (fn [^LongWritable v] (.get v)) wvalues))])
 
@@ -38,8 +34,8 @@
   :input-format :text
   :output-format :text
   :compress-output false
-  :input "data/sample-text.txt"
-  :output "tmp/stats"
+  :input "data/README.txt"
+  :output "tmp/out5"
   :replace true)
 
 (defn -main [& args]
