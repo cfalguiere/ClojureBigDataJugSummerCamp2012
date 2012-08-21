@@ -53,3 +53,10 @@
   (set-stroke :width 5 :series 2) 
     view)
 
+;;; trend
+(with-data ($where { :hrts {:$gt (clj-time/date-time 2012 02 28 8 55 15)
+			   :$lt (clj-time/date-time 2012 02 28 8 57 20) }} ds)
+  (def lm (linear-model ($ :t) ($ :ts)))
+  (doto (time-series-plot  :ts :t )
+    (add-lines ($ :ts) (:fitted lm))
+    view))
