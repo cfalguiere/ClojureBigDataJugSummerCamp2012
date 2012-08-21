@@ -34,13 +34,20 @@
 (view (get ($group-by :lb ds) {:lb "SU01-HomePage-Page"} ))
 
 ;; number of readings per group
-(functor/fmap nrow ($group-by :lb ds))
+(functor/fmap nrow ($group-by :lb ds)) ; yield a map
+($rollup count :t :lb ds) ; yield a dataset
 
-;; stats per group
-(functor/fmap
-   #(with-data ($ :t %)
-      (zipmap [ "mean" "sd"] [ (mean $data) (sd $data) ] )) 
-   ($group-by :lb ds))
+($rollup #(quantile % :probs[0.95])  :t :lb ds)
+
+;; many stats per group
+
+(dataset [:lb :count :mean]
+	 (vals (functor/fmap
+		  #(flatten (conj [(sel % :rows 0 :cols :lb)]
+				  (with-data ($ :t %)
+				    [ (count $data) (mean $data) ] ))
+			    )
+		  ($group-by :lb ds))))
 
 ;; TODO ignore errors - lacking data with errors
 
