@@ -1,4 +1,3 @@
-;;  (:use (incanter core io stats datasets charts))
 (ns statisticator
   (:use (incanter core))
   (:require [clojure.contrib.generic.functor :as functor]
