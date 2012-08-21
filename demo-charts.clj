@@ -31,7 +31,15 @@
 		 :data  ($rollup count :t :shop ds)))
 
 ;;; box-plot 
-(view (box-plot :t :group-by :shop :data ds))
+(view (box-plot :t :group-by :shop :data ds) :legend true)
+
+(def groups ($group-by :shop ds))
+(doto (box-plot :t :data (get groups {:shop "MAF"}) :legend true :series-label "MAF")  
+      (add-box-plot :t :data (get groups {:shop "OIN"}) :series-label "OIN")
+      (add-box-plot :t :data (get groups {:shop "WDK"}) :series-label "WDK")
+      (add-box-plot :t :data (get groups {:shop "FAB"}) :series-label "FAB")
+      view)
+             
 
 ;;; complex plot
 (def px (coerce/to-long (clj-time/date-time 2012 02 28 10 25)))
