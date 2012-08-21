@@ -5,22 +5,26 @@
 
 (load "jmeter-loader-util")
 
-(time (def ds (read-dataset-jmeter-file  "data/jmeter-sample.jtl") ))
+(time (def ds (read-dataset-jmeter-file  "data/sample-1h-m1.jtl") ))
 
 (def ds (conj-cols ds
 		   (col-names ($map #(coerce/from-long %) :ts ds )[:hrts]) ))
+
+;;; count entries
+(nrow ds)
+
 ;;; compute mean
 (mean ($ :t ds))
 
 ;;; compute many indicators
-[ (mean ($ :t ds)) (sd ($ :t ds)) ]
+[ (count ($ :t ds)) (mean ($ :t ds)) (sd ($ :t ds)) ]
 ;; cleaner
 (with-data ($ :t ds)
-  [ (mean $data) (sd $data) (quantile $data :probs[0.95]) ] ) 
+  [ (count $data) (mean $data) (sd $data) (quantile $data :probs[0.95]) ] ) 
 ;; insert labels
 (with-data ($ :t ds)
-  (zipmap [ "mean" "sd" "q95"]
-	  [ (mean $data) (sd $data) (quantile $data :probs[0.95]) ] )) 
+  (zipmap [ "count" "mean" "sd" "q95"]
+	  [ (count $data) (mean $data) (sd $data) (quantile $data :probs[0.95]) ] )) 
 
 ;;; groups
 (sort (into #{} ($ :lb ds)))
@@ -38,6 +42,6 @@
       (zipmap [ "mean" "sd"] [ (mean $data) (sd $data) ] )) 
    ($group-by :lb ds))
 
-;; TODO ignore errors
+;; TODO ignore errors - lacking data with errors
 
 
