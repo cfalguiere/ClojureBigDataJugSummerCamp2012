@@ -27,7 +27,7 @@
 	  [ (count $data) (mean $data) (sd $data) (quantile $data :probs[0.95]) ] )) 
 
 ;;; groups
-(sort (into #{} ($ :lb ds)))
+(distinct ($ :lb ds))
 (keys ($group-by :lb ds))
 
 ;;; dataset for a group

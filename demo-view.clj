@@ -24,7 +24,7 @@
 
 
 ;;; filtering values 
-(sort (into #{} ($ :shop ds)))
+(distinct ($ :shop ds))
 (view ($where {:shop "MAF"} ds))
 (view ($ :t ($where {:shop "MAF"} ds)))
 
