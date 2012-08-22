@@ -6,9 +6,10 @@
             :distribution "repo"
             :comments "Same license as Clojure"}
   :dependencies [[org.clojure/clojure "1.3.0"]
+		 [incanter "1.3.0"] 
                  [org.apache.hadoop/hadoop-core "1.0.3"]
                  [clojure-hadoop/clojure-hadoop "1.4.1"]
-		 [congomongo "0.1.9"]
+		 [congomongo/congomongo "0.1.9"]
                  [log4j/log4j "1.2.16" :exclusions [javax.mail/mail
                                                     javax.jms/jms
                                                     com.sun.jdmk/jmxtools
