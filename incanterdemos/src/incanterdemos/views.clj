@@ -12,7 +12,7 @@
   (let [ds (incanterio/read-dataset  "resources/data/readings.csv" :header true)
 	start-time (clj-time/date-time 2012 02 28 8 55 15)
 	end-time (clj-time/date-time 2012 02 28 8 57 20) ]
-    (with-data (obj-timestamp (fix-timestamp ds))
+    (with-data (readable-timestamp (fix-timestamp ds))
       (view ($ [:lb :t :shop :hrts] ($where {:shop "MAF"
 	       :timestamp {:$gt start-time  :$lt end-time}} ))))))
 

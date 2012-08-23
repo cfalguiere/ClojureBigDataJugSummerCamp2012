@@ -19,6 +19,6 @@
   (let [ds (incanterio/read-dataset  "resources/data/readings.csv" :header true)
 	start-time (clj-time/date-time 2012 02 28 8 55 15)
 	end-time (clj-time/date-time 2012 02 28 8 57 20) ]
-    (trend (obj-timestamp (fix-timestamp ds)) start-time end-time)))
+    (trend (readable-timestamp (fix-timestamp ds)) start-time end-time)))
 
 ; lein run -m incanterdemos.charts

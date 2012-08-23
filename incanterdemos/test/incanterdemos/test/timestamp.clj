@@ -9,8 +9,8 @@
     (is (= 1330418007548
 	 (incanter/sel (fix-timestamp ds) :rows 0 :cols :tsn ) ))))
 
-(deftest test-timestamp
+(deftest test-readable-timestamp
   (let [ ds (incanter/dataset [:ts] [ {:ts 1330418007548} {:ts 1330418007549} ]) ]
     (is (= 2012
-	 (clj-time/year (incanter/sel (obj-timestamp ds) :rows 0 :cols :timestamp ) )))))
+	 (clj-time/year (incanter/sel (readable-timestamp ds) :rows 0 :cols :timestamp ) )))))
 

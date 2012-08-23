@@ -10,7 +10,7 @@
   (incanter/conj-cols ds (incanter/col-names
 			  (incanter/$map #(Long/parseLong %) :ts ds )
 			  [:tsn]) ))
-(defn obj-timestamp [ds]
+(defn readable-timestamp [ds]
   (incanter/conj-cols ds (incanter/col-names
 			  (incanter/$map #(coerce/from-long %) :tsn ds )
 			  [:timestamp]) ))
