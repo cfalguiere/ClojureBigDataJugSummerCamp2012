@@ -7,5 +7,6 @@
             :comments "Same license as Clojure"}
   :dependencies [[org.clojure/clojure "1.3.0"]
 		 [incanter "1.3.0"]
-		 [org.clojure/algo.generic "0.1.0"]]
+		 [org.clojure/algo.generic "0.1.0"]
+		 [clj-time "0.4.4"]]
   :dev-dependencies [[swank-clojure "1.4.2"]])
