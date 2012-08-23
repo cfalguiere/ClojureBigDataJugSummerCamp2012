@@ -2,5 +2,5 @@
   (:use [loaderdemo.core])
   (:use [clojure.test]))
 
-(deftest replace-me ;; FIXME: write
-  (is false "No tests have been written."))
+(deftest test-f1 
+  (is 6 (f1 3)))
