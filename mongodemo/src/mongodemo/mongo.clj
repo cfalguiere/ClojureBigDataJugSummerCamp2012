@@ -1,4 +1,4 @@
-(ns demomongo
+(ns  mongodemo.mongo
   (:require [somnium.congomongo :as congomongo]
 	    [incanter.core :as incanter]
 	    [incanter.io :as io]
@@ -18,9 +18,9 @@
       (mongodb/fetch-dataset :readings ))))
 
 (defn -main [& args]
-  (let [ds ( load-data  "../data/readings.csv")]
+  (let [ds ( load-data  "resources/data/readings.csv")]
     (batch-insert-dataset ds)
     (let [ds2 (lookup-dataset)]
-      (println (incanter/nrow ds2 ))))
+      (println (incanter/nrow ds2 )))))
 
-
+; start mongo server before running this script
