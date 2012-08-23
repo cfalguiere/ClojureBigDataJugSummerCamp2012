@@ -6,5 +6,5 @@ pom.xml
 */tmp/
 */classes/
 */lib/
-
-
+.idea
+.DS_Store
