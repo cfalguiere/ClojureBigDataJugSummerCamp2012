@@ -1,0 +1,4 @@
+clojure-hadoop
+
+A library to assist in writing Hadoop MapReduce jobs in Clojure.
+
