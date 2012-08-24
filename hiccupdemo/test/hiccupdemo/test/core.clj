@@ -11,7 +11,10 @@
 	   result))))
 
 (deftest test-build-page
-  (let [result (build-page)]
+  (let [result (build-page nil)]
     (println result)
-    (is (= "<!DOCTYPE html>\\n<html><p>test</p></html>"
-	   result))))
+    (is (= 159
+	   (count result)))))
+
+(deftest test-savepage
+  )
