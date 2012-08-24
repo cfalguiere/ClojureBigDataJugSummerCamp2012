@@ -13,7 +13,7 @@
 	start-time (clj-time/date-time 2012 02 28 8 55 15)
 	end-time (clj-time/date-time 2012 02 28 8 57 20) ]
     (with-data (readable-timestamp (fix-timestamp ds))
-      (view ($ [:lb :t :shop :hrts] ($where {:shop "MAF"
+      (view ($ [:lb :t :shop :timestamp] ($where {:shop "MAF"
 	       :timestamp {:$gt start-time  :$lt end-time}} ))))))
 
 ; lein run -m incanterdemos.views
