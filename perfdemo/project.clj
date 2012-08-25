@@ -12,7 +12,8 @@
 		 [org.clojure/algo.generic "0.1.0"]
 		 [clj-time "0.4.4"]]
   :dev-dependencies [[swank-clojure "1.4.2"]]
-  :main perfdemo.core)
+  :main perfdemo.core
+  :jvm-opts ["-Xmx1g"] )
 
 
 
