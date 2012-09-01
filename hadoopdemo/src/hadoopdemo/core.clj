@@ -14,20 +14,16 @@
 (defn csv-line-parser [line]
   (map #(.trim %) (first (csv/parse-csv line))))
 
-(defn csv-map-reader [#^LongWritable wkey #^Writable wline]
-  (println ">>>>csv-map-reader: wkey" wkey)
-  (println ">>>>csv-map-reader: wvalue" (.toString wline))
-  [(.get wkey) (csv-line-parser (.toString wline))])
-
-(defn my-map [key cells]
+(defn my-map [key line]
   (println ">>>>my-map: key " key)
-  (println ">>>>my-map: cells " cells)
+  (println ">>>>my-map: line " line)
   (cond
     (= key 0) []
-    :else (let [ t (Long/parseLong (nth cells 0))
-		[lb, shop, kw] (map #(nth cells %) [1,6,7])
-		cat (map #( [% t] ) [lb, shop, kw])]
-	    [["all" t] [(str "lb:" lb) t] [(str "shop:" shop) t] [(str "shop:" kw) t]] )))
+    :else (let [ cells  (map #(.trim %) (first (csv/parse-csv line))) ; parse line
+		 t (Long/parseLong (nth cells 0)) ; coerce t to long
+		 [lb, shop, kw] (map #(nth cells %) [1,6,7]) ; get factors
+	       ]
+	    [["all" t] [(str "lb:" lb) t] [(str "shop:" shop) t] [(str "kw:" kw) t]] )))
 
 (defn string-long-map-writer [^TaskInputOutputContext context ^String key measure] 
   (println ">>>>string-long-map-writer: key " key)
@@ -48,7 +44,6 @@
      [(str key ":mean") (stats/mean measures)]]))
 
 (defn string-long-reduce-writer [^TaskInputOutputContext context ^String key value]
-  ;(println ">>>>string-long-reduce-writer context" context)
   (println ">>>>string-long-reduce-writer: key" key)
   (println ">>>>string-long-reduce-writer: value" value)
   (.write context (Text. key) (LongWritable. value)))
@@ -56,12 +51,9 @@
 
 (defjob/defjob job
   :input-format :text
-  ;:input "resources/sample-text.txt"
-;  :input "resources/sample-readings.csv"
   :input "resources/readings.csv"
   :map my-map
-;  :map-reader wrap/int-string-map-reader
-  :map-reader csv-map-reader
+  :map-reader wrap/int-string-map-reader
   :map-writer string-long-map-writer
   :reduce my-reduce
   :reduce-reader string-long-reduce-reader
@@ -69,7 +61,7 @@
   :output-key Text
   :output-value LongWritable
   :output-format :text
-  :output "tmp/out5"
+  :output "tmp/out-stats"
   :compress-output false
   :replace true)
 
