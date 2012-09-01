@@ -18,5 +18,6 @@
 
 (defn -main [& args]
   (let [ds (read-dataset-jmeter-file  "test-resources/data/jmeter-sample.jtl")]
-    (println "read " (incanter/nrow ds)) ))
+    (println "read " (incanter/nrow ds)) 
+    (incanter/save ds "output/readings.csv")))
 
