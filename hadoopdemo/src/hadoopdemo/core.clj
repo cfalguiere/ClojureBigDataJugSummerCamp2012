@@ -19,7 +19,7 @@
   (println ">>>>my-map: line " line)
   (cond
     (= key 0) []
-    :else (let [ cells  (map #(.trim %) (first (csv/parse-csv line))) ; parse line
+    :else (let [ cells  (csv-line-parser line) ; parse line
 		 t (Long/parseLong (nth cells 0)) ; coerce t to long
 		 [lb, shop, kw] (map #(nth cells %) [1,6,7]) ; get factors
 	       ]
