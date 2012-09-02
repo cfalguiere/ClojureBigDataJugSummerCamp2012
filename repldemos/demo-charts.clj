@@ -1,15 +1,11 @@
 (use '(incanter core  charts))
 
-(def ds (read-dataset  "../data/readings.csv" :header true) )
-
-(def ds (conj-cols ds
-		   (col-names ($map #(Long/parseLong %) :ts ds )[:tsn]) ))
-(head ($ [:ts :tsn] ds))
+(def ds (read-dataset  "readings.csv" :header true) )
 
 ;;; time series of resp time
-(view (time-series-plot :tsn :t :data ds))
+(view (time-series-plot :ts :t :data ds))
 
-(doto  (time-series-plot :tsn :t :data ds :title "Readings"
+(doto  (time-series-plot :ts :t :data ds :title "Readings"
 			 :x-label "time" :y-label "resp. time (ms)"
 			 :legend true :series-label "duration ms"
 			 )
@@ -26,7 +22,8 @@
 
 ;;; box-plot 
 (view (box-plot :t :group-by :shop :data ds) :legend true)
-             
+
+(def groups ($group-by :shop ds))
 (doto (box-plot :t 
         :data (get groups {:shop "MAF"}) 
         :legend true :series-label "MAF")  
@@ -44,7 +41,7 @@
 ;;; complex plot
 
 (def ts (sel ds :cols :tsn))
-(doto  (time-series-plot :tsn :t :data ds :title "Readings"
+(doto  (time-series-plot :ts :t :data ds :title "Readings"
 			 :x-label "time" :y-label "resp. time (ms)"
 			 :legend true :series-label "duration ms"
 			 )

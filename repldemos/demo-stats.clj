@@ -1,9 +1,6 @@
 (use '(incanter core stats))
 
-(def ds (read-dataset  "../data/readings.csv" :header true) )
-
-(def ds (conj-cols ds
-		   (col-names ($map #(Long/parseLong %) :ts ds )[:tsn]) ))
+(def ds (read-dataset  "readings.csv" :header true) )
 
 ;;; count entries
 (nrow ds)

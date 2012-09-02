@@ -1,6 +1,6 @@
 (use '(incanter core io))
 
-(def ds (read-dataset  "../data/readings.csv" :header true) )
+(def ds (read-dataset  "readings.csv" :header true) )
 
 ;;; how many lines ?
 (nrow ds)
