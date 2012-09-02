@@ -4,6 +4,16 @@
 	    [incanter.stats :as stats]
 	    [incanter.io :as incanterio]) )
 
+(defn series-summary [series]
+    { :count (count series)
+     :mean  (stats/mean series)
+     :sd  (stats/sd series)
+     :min (apply min series)
+     :max (apply max series)
+     :q50 (first (stats/quantile series :probs [0.5]))
+     :q95 (first (stats/quantile series :probs [0.9])) })
+
+
 (defn dataset-stats-vector [ds]
   (with-data ($ :t ds)
     [ (count $data) (stats/mean $data) ] ))

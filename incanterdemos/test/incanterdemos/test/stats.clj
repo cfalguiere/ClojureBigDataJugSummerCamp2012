@@ -3,6 +3,12 @@
   (:use incanterdemos.stats) ; code under test
   (:require  [incanter.core :as incanter]))
 
+(deftest test-series-summary
+  (let [ series [ 1 2 ] ]
+    (is (= { :count 2 :mean 1.5 :sd 0.7071067811865476 :min 1 :max 2 :q50 1.5 :q95 1.9 }
+	 (series-summary series) ))))
+
+
 (deftest test-dataset-stats-vector
   (let [ ds (incanter/dataset [:lb :t] [ {:lb "A" :t 1} {:lb "A" :t 2} ]) ]
     (is (= [2 1.5]
