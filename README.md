@@ -1,9 +1,12 @@
 ClojureBigDataJugSummerCamp2012
 ==============================
 
-The examples run on Clojure 1.3.0 and the last release of Incanter on Clojars, 1.3.0.
+link to the PDF of the talk http://fr.slideshare.net/claude.falguiere/incanter-bigdata-jsc2012
 
-Unfortunately these is an issue in 1.3.0 regarding read-dataset (https://groups.google.com/forum/?fromgroups=#!topic/incanter/saIgmLdl8EQ).
+
+The examples run on Clojure 1.3.0 and the last release of Incanter 1.3.0.
+
+Unfortunately these is an issue in Incanter 1.3.0 regarding read-dataset (https://groups.google.com/forum/?fromgroups=#!topic/incanter/saIgmLdl8EQ).
 Long values (e.g. the Java timestamp) are not parsed into Number.
 
 The master branch https://github.com/liebke/incanter has been fixed but the jar hasn't been deployed.
